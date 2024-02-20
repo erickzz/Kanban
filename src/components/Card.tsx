@@ -2,40 +2,29 @@ import { useState, useEffect } from 'react';
 import { CardProperties, CardItems } from '../types';
 
 function Card({ cardOptions }: { cardOptions: CardProperties }) {
-  useEffect(() => {
-    if (!localStorage.getItem('cardItems')) {
-      localStorage.setItem('cardItems', JSON.stringify(defaultItems));
-    }
-  }, []);
-
-  const defaultItems: CardItems[] = [
-    { cardId: 1, items: ['item 1', 'item 1'] },
-    { cardId: 2, items: ['item 2', 'item 2'] },
-    { cardId: 3, items: ['item 3', 'item 3'] },
-  ];
-
   const options = cardOptions;
 
   const storedItemsJson = localStorage.getItem('cardItems');
-  const cardItems: CardItems[] = JSON.parse(storedItemsJson!) || defaultItems;
+  const cardItems: CardItems[] = JSON.parse(storedItemsJson!);
 
   const [cardsItemsState, setCardsItemsState] =
     useState<CardItems[]>(cardItems);
 
-  console.log(cardsItemsState);
+  useEffect(() => {
+    console.log(cardsItemsState);
+  }, [cardsItemsState]);
 
   const [newCardOption, setNewCardOption] = useState('');
 
   const addNewOption = (cardId: number) => {
     setNewCardOption('');
-    const newCardsItems = cardsItemsState.map((item) => {
-      if (item.cardId === cardId) {
-        item.items.push(newCardOption);
-      }
-      return item;
-    });
-    setCardsItemsState(newCardsItems);
-    localStorage.setItem('cardItems', JSON.stringify(cardsItemsState));
+
+    const newItem = { cardId: cardId, items: [newCardOption] };
+    console.log(newItem);
+    console.log(cardsItemsState);
+    setCardsItemsState((prev) => [...prev, newItem]);
+
+    // localStorage.setItem('cardItems', JSON.stringify(cardsItemsState));
   };
 
   const ItemsRender = cardsItemsState.map((item) => {
@@ -52,7 +41,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
 
   return (
     <div
-      className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5`}
+      className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5 h-auto`}
       style={{ backgroundColor: cardOptions.color }}
     >
       <h3 className="text-xl font-semibold ">{options.title}</h3>
