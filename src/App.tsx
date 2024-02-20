@@ -41,7 +41,7 @@ function App() {
       </div>
       <div className="flex">
         {cardsState.map((card, index) => (
-          <Card key={index} cardOptions={card} cardsState={setCardsState} />
+          <Card key={index} cardOptions={card} />
         ))}
       </div>
     </div>

@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { CardProperties, CardItems } from '../types';
 
-function Card({
-  cardOptions,
-  cardsState,
-}: {
-  cardOptions: CardProperties;
-  cardsState: React.Dispatch<React.SetStateAction<CardProperties[]>>;
-}) {
+function Card({ cardOptions }: { cardOptions: CardProperties }) {
   const options = cardOptions;
 
   const storedItemsJson = localStorage.getItem('cards');
@@ -24,19 +18,29 @@ function Card({
           { cardId: 3, items: ['item 3', 'item 3'] },
         ];
 
-  console.log(cardItems);
+  const [cardsItemsState, setCardsItemsState] =
+    useState<CardItems[]>(cardItems);
 
   const [newCardOption, setNewCardOption] = useState('');
 
-  const addNewOption = () => {
-    console.log(cardOptions.id);
-    console.log(newCardOption);
+  const addNewOption = (cardId: number) => {
+    setNewCardOption('');
+    setCardsItemsState((prev) => {
+      return prev.map((item) => {
+        if (item.cardId === cardId) {
+          return {
+            ...item,
+            items: [...item.items, newCardOption],
+          };
+        }
+        return item;
+      });
+    });
   };
 
-  const ItemsRender = cardItems.map((item) => {
-    console.log(item.cardId, cardOptions.id);
+  const ItemsRender = cardsItemsState.map((item) => {
     if (item.cardId === cardOptions.id) {
-      item.items.map((item, index) => {
+      return item.items.map((item, index) => {
         return (
           <li key={index} className="p-2 bg-slate-200 rounded mt-4">
             {item}
@@ -55,14 +59,15 @@ function Card({
       <p className="">{options.description}</p>
       <ul>
         {ItemsRender}
-        <div className="flex h-auto w-auto justify-around align-bottom">
+        <div className="flex h-auto w-auto  ">
           <input
-            className="bg-slate-200 rounded mt-4 mx-4 h-10 p-2 w-4/6 focus:outline-none"
+            className="bg-slate-200 rounded mt-4 mr-4 h-10 p-2 w-4/6 focus:outline-none"
             onChange={(e) => setNewCardOption(e.target.value)}
+            value={newCardOption}
           />
           <button
             className="bg-slate-200 rounded px-4 h-10 text-sm self-end w-2/6"
-            onClick={addNewOption}
+            onClick={() => addNewOption(options.id)}
           >
             Add new
           </button>
