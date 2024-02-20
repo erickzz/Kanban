@@ -1,41 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CardProperties, CardItems } from '../types';
 
 function Card({ cardOptions }: { cardOptions: CardProperties }) {
+  useEffect(() => {
+    if (!localStorage.getItem('cardItems')) {
+      localStorage.setItem('cardItems', JSON.stringify(defaultItems));
+    }
+  }, []);
+
+  const defaultItems: CardItems[] = [
+    { cardId: 1, items: ['item 1', 'item 1'] },
+    { cardId: 2, items: ['item 2', 'item 2'] },
+    { cardId: 3, items: ['item 3', 'item 3'] },
+  ];
+
   const options = cardOptions;
 
-  const storedItemsJson = localStorage.getItem('cards');
-  const storedItems: CardItems[] = storedItemsJson
-    ? JSON.parse(storedItemsJson)
-    : [];
-
-  const cardItems: CardItems[] =
-    storedItems.length > 0
-      ? storedItems
-      : [
-          { cardId: 1, items: ['item 1', 'item 1'] },
-          { cardId: 2, items: ['item 2', 'item 2'] },
-          { cardId: 3, items: ['item 3', 'item 3'] },
-        ];
+  const storedItemsJson = localStorage.getItem('cardItems');
+  const cardItems: CardItems[] = JSON.parse(storedItemsJson!) || defaultItems;
 
   const [cardsItemsState, setCardsItemsState] =
     useState<CardItems[]>(cardItems);
+
+  console.log(cardsItemsState);
 
   const [newCardOption, setNewCardOption] = useState('');
 
   const addNewOption = (cardId: number) => {
     setNewCardOption('');
-    setCardsItemsState((prev) => {
-      return prev.map((item) => {
-        if (item.cardId === cardId) {
-          return {
-            ...item,
-            items: [...item.items, newCardOption],
-          };
-        }
-        return item;
-      });
+    const newCardsItems = cardsItemsState.map((item) => {
+      if (item.cardId === cardId) {
+        item.items.push(newCardOption);
+      }
+      return item;
     });
+    setCardsItemsState(newCardsItems);
+    localStorage.setItem('cardItems', JSON.stringify(cardsItemsState));
   };
 
   const ItemsRender = cardsItemsState.map((item) => {
