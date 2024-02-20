@@ -15,13 +15,16 @@ function Card({
     ? JSON.parse(storedItemsJson)
     : [];
 
-  const cardItems: CardItems[] = storedItems.length > 0 ? storedItems : [];
+  const cardItems: CardItems[] =
+    storedItems.length > 0
+      ? storedItems
+      : [
+          { cardId: 1, items: ['item 1', 'item 1'] },
+          { cardId: 2, items: ['item 2', 'item 2'] },
+          { cardId: 3, items: ['item 3', 'item 3'] },
+        ];
 
-  const items: CardItems[] = cardItems || [
-    { cardId: 1, items: ['item 1', 'item 1'] },
-    { cardId: 2, items: ['item 2', 'item 2'] },
-    { cardId: 3, items: ['item 3', 'item 3'] },
-  ];
+  console.log(cardItems);
 
   const [newCardOption, setNewCardOption] = useState('');
 
@@ -30,7 +33,8 @@ function Card({
     console.log(newCardOption);
   };
 
-  const ItemsRender = items.map((item) => {
+  const ItemsRender = cardItems.map((item) => {
+    console.log(item.cardId, cardOptions.id);
     if (item.cardId === cardOptions.id) {
       item.items.map((item, index) => {
         return (
