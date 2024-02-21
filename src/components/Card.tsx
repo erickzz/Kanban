@@ -61,7 +61,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
                 deleteItem(item.id);
               }}
             >
-              <Trash size={20} color="#1E1E1E" />
+              <Trash size={20} color="rgba(0,0,0,0.5)" />
             </button>
           </div>
         </li>
