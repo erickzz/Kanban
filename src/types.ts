@@ -1,11 +1,11 @@
-export interface CardProperties {
+export type CardProperties = {
     id:number,
     title: string;
     description: string;
     color: string;
 }
 
-export interface CardItems {
+export type CardItems = {
     cardId: number,
-    items:string[]
+    value:string
 }

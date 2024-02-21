@@ -4,38 +4,42 @@ import { CardProperties, CardItems } from '../types';
 function Card({ cardOptions }: { cardOptions: CardProperties }) {
   const options = cardOptions;
 
-  const storedItemsJson = localStorage.getItem('cardItems');
-  const cardItems: CardItems[] = JSON.parse(storedItemsJson!);
+  const [newCardOption, setNewCardOption] = useState<string>('');
 
-  const [cardsItemsState, setCardsItemsState] =
-    useState<CardItems[]>(cardItems);
+  const [cardItems, setCardItems] = useState<CardItems[]>([]);
 
   useEffect(() => {
-    console.log(cardsItemsState);
-  }, [cardsItemsState]);
+    const itemsFromStorage = localStorage.getItem('cardItems');
+    if (itemsFromStorage === null) {
+      localStorage.setItem('cardItems', JSON.stringify([]));
+    } else {
+      setCardItems(JSON.parse(itemsFromStorage));
+    }
+  }, []);
 
-  const [newCardOption, setNewCardOption] = useState('');
-
-  const addNewOption = (cardId: number) => {
+  const addNewOption = (id: number) => {
     setNewCardOption('');
-
-    const newItem = { cardId: cardId, items: [newCardOption] };
-    console.log(newItem);
-    console.log(cardsItemsState);
-    setCardsItemsState((prev) => [...prev, newItem]);
-
-    // localStorage.setItem('cardItems', JSON.stringify(cardsItemsState));
+    const itemsFromStorage = JSON.parse(
+      localStorage.getItem('cardItems') ?? ''
+    );
+    const newItem: CardItems = { cardId: id, value: newCardOption };
+    if (itemsFromStorage === null) {
+      localStorage.setItem('cardItems', JSON.stringify([newItem]));
+      setCardItems([newItem]);
+    } else {
+      itemsFromStorage.push(newItem);
+      localStorage.setItem('cardItems', JSON.stringify(itemsFromStorage));
+      setCardItems(itemsFromStorage);
+    }
   };
 
-  const ItemsRender = cardsItemsState.map((item) => {
+  const ItemsRender = cardItems.map((item, index) => {
     if (item.cardId === cardOptions.id) {
-      return item.items.map((item, index) => {
-        return (
-          <li key={index} className="p-2 bg-slate-200 rounded mt-4">
-            {item}
-          </li>
-        );
-      });
+      return (
+        <li key={index} className="p-2 bg-slate-200 rounded mt-4">
+          {item.value}
+        </li>
+      );
     }
   });
 
@@ -56,7 +60,9 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
           />
           <button
             className="bg-slate-200 rounded px-4 h-10 text-sm self-end w-2/6"
-            onClick={() => addNewOption(options.id)}
+            onClick={() => {
+              addNewOption(options.id);
+            }}
           >
             Add new
           </button>
