@@ -6,6 +6,7 @@ export type CardProperties = {
 }
 
 export type CardItems = {
+    id:number,
     cardId: number,
     value:string
 }

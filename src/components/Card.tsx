@@ -22,7 +22,11 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
     const itemsFromStorage = JSON.parse(
       localStorage.getItem('cardItems') ?? ''
     );
-    const newItem: CardItems = { cardId: id, value: newCardOption };
+    const newItem: CardItems = {
+      id: Math.random() * 100,
+      cardId: id,
+      value: newCardOption,
+    };
     if (itemsFromStorage === null) {
       localStorage.setItem('cardItems', JSON.stringify([newItem]));
       setCardItems([newItem]);
@@ -32,6 +36,11 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
       setCardItems(itemsFromStorage);
     }
   };
+
+  const cardId = cardOptions.id;
+  const itensNumber = cardItems.filter((item) => item.cardId === cardId).length;
+  console.log(itensNumber);
+  const height = 180 + 50 * itensNumber;
 
   const ItemsRender = cardItems.map((item, index) => {
     if (item.cardId === cardOptions.id) {
@@ -45,8 +54,8 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
 
   return (
     <div
-      className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5 h-auto`}
-      style={{ backgroundColor: cardOptions.color }}
+      className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5`}
+      style={{ backgroundColor: cardOptions.color, height: `${height}px` }}
     >
       <h3 className="text-xl font-semibold ">{options.title}</h3>
       <p className="">{options.description}</p>
