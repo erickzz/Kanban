@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CardProperties, CardItems } from '../types';
+import { Trash } from 'lucide-react';
 
 function Card({ cardOptions }: { cardOptions: CardProperties }) {
   const options = cardOptions;
@@ -55,12 +56,12 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
           <div className="flex justify-between align-middle">
             {item.value}
             <button
-              className="bg-slate-300 rounded px-4 h-10 text-sm self-end w-2/6"
+              className="px-4 h-auto"
               onClick={() => {
                 deleteItem(item.id);
               }}
             >
-              Delete
+              <Trash size={20} color="#1E1E1E" />
             </button>
           </div>
         </li>
