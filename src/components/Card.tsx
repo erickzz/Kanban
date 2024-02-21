@@ -84,7 +84,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
             value={newCardOption}
           />
           <button
-            className="bg-slate-200 rounded px-4 h-10 text-sm self-end w-2/6"
+            className="bg-none border-2 border-white rounded px-4 h-10 text-sm text-white self-end w-2/6 hover:bg-white hover:text-black transition-colors"
             onClick={() => {
               addNewOption(options.id);
             }}
