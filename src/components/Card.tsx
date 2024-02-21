@@ -37,16 +37,32 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
     }
   };
 
+  const deleteItem = (id: number) => {
+    const newItems = cardItems.filter((i) => i.id !== id);
+    localStorage.setItem('cardItems', JSON.stringify(newItems));
+    setCardItems(newItems);
+  };
+
   const cardId = cardOptions.id;
   const itensNumber = cardItems.filter((item) => item.cardId === cardId).length;
   console.log(itensNumber);
-  const height = 180 + 50 * itensNumber;
+  const height = 180 + 70 * itensNumber;
 
   const ItemsRender = cardItems.map((item, index) => {
     if (item.cardId === cardOptions.id) {
       return (
         <li key={index} className="p-2 bg-slate-200 rounded mt-4">
-          {item.value}
+          <div className="flex justify-between align-middle">
+            {item.value}
+            <button
+              className="bg-slate-300 rounded px-4 h-10 text-sm self-end w-2/6"
+              onClick={() => {
+                deleteItem(item.id);
+              }}
+            >
+              Delete
+            </button>
+          </div>
         </li>
       );
     }
