@@ -50,6 +50,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
   };
 
   const editItem = (id: number) => {
+    if (editItemValue === '') return;
     const getItems = JSON.parse(localStorage.getItem('cardItems') ?? '');
     const newItems = getItems.map((item: { id: number; value: string }) => {
       if (item.id === id) {
@@ -87,8 +88,9 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
               <button
                 className="px-4 h-auto w-2"
                 onClick={() => {
-                  console.log(inputRef.current);
-                  inputRef.current.focus();
+                  const input = document.getElementById(item.id.toString());
+                  console.log(input);
+                  input?.focus();
                 }}
               >
                 <Pencil size={20} color="rgba(0,0,0,0.5)" />
