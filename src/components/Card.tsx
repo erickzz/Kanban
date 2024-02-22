@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { CardProperties, CardItems } from '../types';
-import { Trash, Pencil } from 'lucide-react';
+import { Trash, Pencil, ArrowLeftRight } from 'lucide-react';
 
 function Card({ cardOptions }: { cardOptions: CardProperties }) {
   const options = cardOptions;
@@ -62,6 +62,10 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
     localStorage.setItem('cardItems', JSON.stringify(newItems));
   };
 
+  const moveItem = (id: number) => {
+    console.log(id);
+  };
+
   const cardId = cardOptions.id;
   const itensNumber = cardItems.filter((item) => item.cardId === cardId).length;
   const height = 180 + 70 * itensNumber;
@@ -75,7 +79,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
               id={item.id.toString()}
               ref={inputRef}
               defaultValue={item.value}
-              className="bg-slate-200 w-3/4"
+              className="bg-slate-200 w-2/4 cursor-default"
               onBlur={() => {
                 editItem(item.id);
               }}
@@ -85,6 +89,15 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
             />
             {/* {item.value} */}
             <div className="w-1/6 flex justify-end">
+              <button>
+                <ArrowLeftRight
+                  size={20}
+                  className="text-zinc-500 hover:text-zinc-800 transition-colors"
+                  onClick={() => {
+                    moveItem(item.id);
+                  }}
+                />
+              </button>
               <button
                 className="px-4 h-auto w-2"
                 onClick={() => {
@@ -93,7 +106,10 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
                   input?.focus();
                 }}
               >
-                <Pencil size={20} color="rgba(0,0,0,0.5)" />
+                <Pencil
+                  size={20}
+                  className="text-zinc-500 hover:text-zinc-800 transition-colors "
+                />
               </button>
               <button
                 className="px-4 h-auto w-2 mr-2"
@@ -101,7 +117,10 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
                   deleteItem(item.id);
                 }}
               >
-                <Trash size={20} color="rgba(0,0,0,0.5)" />
+                <Trash
+                  size={20}
+                  className="text-zinc-500 hover:text-zinc-800 transition-colors "
+                />
               </button>
             </div>
           </div>
@@ -121,7 +140,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
         {ItemsRender}
         <div className="flex h-auto w-auto  ">
           <input
-            className="bg-slate-200 rounded mt-4 mr-4 h-10 p-2 w-4/6 focus:outline-none"
+            className=" bg-slate-200 rounded mt-4 mr-4 h-10 p-2 w-4/6 focus:outline-none"
             onChange={(e) => setNewCardOption(e.target.value)}
             value={newCardOption}
           />

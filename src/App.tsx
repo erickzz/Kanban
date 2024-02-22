@@ -1,3 +1,4 @@
+import { Info, PlusCircle } from 'lucide-react';
 import { useState } from 'react';
 import { CardProperties } from './types';
 import Card from './components/Card';
@@ -32,17 +33,24 @@ function App() {
   const cards: CardProperties[] =
     storedCards.length > 0 ? storedCards : defaultCards;
 
-  const [cardsState, setCardsState] = useState<CardProperties[]>(cards);
+  const [cardsState] = useState<CardProperties[]>(cards);
 
   return (
     <div className="w-screen h-screen bg-zinc-800">
-      <div className="p-10 text-white text-2xl">
+      <div className="p-10 mr-10 text-white text-2xl flex justify-between ">
         <h2>Kanban</h2>
+        <Info size={30} className="text-slate-200 cursor-pointer" />
       </div>
-      <div className="flex">
+      <div className="flex ">
         {cardsState.map((card, index) => (
           <Card key={index} cardOptions={card} />
         ))}
+        <div
+          className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5 flex justify-center items-center`}
+          style={{ backgroundColor: 'transparent', height: `320px` }}
+        >
+          <PlusCircle size={80} className="text-slate-200 cursor-pointer" />
+        </div>
       </div>
     </div>
   );
