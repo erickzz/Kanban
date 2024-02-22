@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CardProperties, CardItems } from '../types';
-import { Trash } from 'lucide-react';
+import { Trash, Pencil } from 'lucide-react';
 
 function Card({ cardOptions }: { cardOptions: CardProperties }) {
   const options = cardOptions;
 
   const [newCardOption, setNewCardOption] = useState<string>('');
 
+  const [editItemValue, setEditItemValue] = useState<string>('');
+
   const [cardItems, setCardItems] = useState<CardItems[]>([]);
+
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const itemsFromStorage = localStorage.getItem('cardItems');
@@ -19,6 +23,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
   }, []);
 
   const addNewOption = (id: number) => {
+    if (newCardOption === '') return;
     setNewCardOption('');
     const itemsFromStorage = JSON.parse(
       localStorage.getItem('cardItems') ?? ''
@@ -44,9 +49,20 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
     setCardItems(newItems);
   };
 
+  const editItem = (id: number) => {
+    const getItems = JSON.parse(localStorage.getItem('cardItems') ?? '');
+    const newItems = getItems.map((item: { id: number; value: string }) => {
+      if (item.id === id) {
+        item.value = editItemValue;
+      }
+      return item;
+    });
+    setCardItems(newItems);
+    localStorage.setItem('cardItems', JSON.stringify(newItems));
+  };
+
   const cardId = cardOptions.id;
   const itensNumber = cardItems.filter((item) => item.cardId === cardId).length;
-  console.log(itensNumber);
   const height = 180 + 70 * itensNumber;
 
   const ItemsRender = cardItems.map((item, index) => {
@@ -54,15 +70,38 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
       return (
         <li key={index} className="p-2 bg-slate-200 rounded mt-4">
           <div className="flex justify-between align-middle">
-            {item.value}
-            <button
-              className="px-4 h-auto"
-              onClick={() => {
-                deleteItem(item.id);
+            <input
+              id={item.id.toString()}
+              ref={inputRef}
+              defaultValue={item.value}
+              className="bg-slate-200 w-3/4"
+              onBlur={() => {
+                editItem(item.id);
               }}
-            >
-              <Trash size={20} color="rgba(0,0,0,0.5)" />
-            </button>
+              onChange={(e) => {
+                setEditItemValue(e.target.value);
+              }}
+            />
+            {/* {item.value} */}
+            <div className="w-1/6 flex justify-end">
+              <button
+                className="px-4 h-auto w-2"
+                onClick={() => {
+                  console.log(inputRef.current);
+                  inputRef.current.focus();
+                }}
+              >
+                <Pencil size={20} color="rgba(0,0,0,0.5)" />
+              </button>
+              <button
+                className="px-4 h-auto w-2 mr-2"
+                onClick={() => {
+                  deleteItem(item.id);
+                }}
+              >
+                <Trash size={20} color="rgba(0,0,0,0.5)" />
+              </button>
+            </div>
           </div>
         </li>
       );
