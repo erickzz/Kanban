@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { CardProperties, CardItems } from '../types';
 import { Trash, Pencil, ArrowLeftRight } from 'lucide-react';
 

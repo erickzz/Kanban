@@ -1,40 +1,43 @@
 import { Info, PlusCircle } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { CardProperties } from './types';
 import Card from './components/Card';
 
 function App() {
   const storedCardsJson = localStorage.getItem('cards');
-  const storedCards: CardProperties[] = storedCardsJson
-    ? JSON.parse(storedCardsJson)
-    : [];
+  const storedCards: CardProperties[] = useMemo(() => {
+    return storedCardsJson ? JSON.parse(storedCardsJson) : [];
+  }, [storedCardsJson]);
 
-  const defaultCards: CardProperties[] = [
-    {
-      id: 1,
-      title: 'Para fazer 😅',
-      description: 'Lista de coisa a fazer',
-      color: '#ae8fc7',
-    },
-    {
-      id: 2,
-      title: 'Fazendo 🤯',
-      description: 'Lista de coisas que estou fazendo no momento',
-      color: '#8fc78f',
-    },
-    {
-      id: 3,
-      title: 'Feitos 😎',
-      description: 'Lista de coisas que já fiz e estão prontas',
-      color: '#f26e64',
-    },
-  ];
+  const defaultCards: CardProperties[] = useMemo(
+    () => [
+      {
+        id: 1,
+        title: 'Para fazer 😅',
+        description: 'Lista de coisa a fazer',
+        color: '#ae8fc7',
+      },
+      {
+        id: 2,
+        title: 'Fazendo 🤯',
+        description: 'Lista de coisas que estou fazendo no momento',
+        color: '#8fc78f',
+      },
+      {
+        id: 3,
+        title: 'Feitos 😎',
+        description: 'Lista de coisas que já fiz e estão prontas',
+        color: '#f26e64',
+      },
+    ],
+    []
+  );
 
   useEffect(() => {
     if (storedCards.length === 0) {
       localStorage.setItem('cards', JSON.stringify(defaultCards));
     }
-  }, [storedCards]);
+  }, [storedCards, defaultCards]);
 
   const cards: CardProperties[] =
     storedCards.length > 0 ? storedCards : defaultCards;
