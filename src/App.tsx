@@ -12,20 +12,20 @@ function App() {
   const defaultCards: CardProperties[] = [
     {
       id: 1,
-      title: 'To Dos',
-      description: 'Things I have to do',
+      title: 'Para fazer 😅',
+      description: 'Lista de coisa a fazer',
       color: '#ae8fc7',
     },
     {
       id: 2,
-      title: 'Doing',
-      description: 'Things I am doing',
+      title: 'Fazendo 🤯',
+      description: 'Lista de coisas que estou fazendo no momento',
       color: '#8fc78f',
     },
     {
       id: 3,
-      title: 'Done',
-      description: 'Things I have done',
+      title: 'Feitos 😎',
+      description: 'Lista de coisas que já fiz e estão prontas',
       color: '#f26e64',
     },
   ];
