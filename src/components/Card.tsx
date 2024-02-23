@@ -1,20 +1,8 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CardProperties, CardItems } from '../types';
 import { Trash, Pencil, ArrowLeftRight } from 'lucide-react';
 
 function Card({ cardOptions }: { cardOptions: CardProperties }) {
-  const options = cardOptions;
-
-  const cardsInfo = JSON.parse(localStorage.getItem('cards'));
-
-  const [newCardOption, setNewCardOption] = useState<string>('');
-
-  const [editItemValue, setEditItemValue] = useState<string>('');
-
-  const [cardItems, setCardItems] = useState<CardItems[]>([]);
-
-  const inputsElements = document.getElementsByTagName('input');
-
   useEffect(() => {
     const itemsFromStorage = localStorage.getItem('cardItems');
     if (itemsFromStorage === null) {
@@ -23,6 +11,18 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
       setCardItems(JSON.parse(itemsFromStorage));
     }
   }, []);
+
+  const options = cardOptions;
+
+  const cardsInfo = JSON.parse(localStorage.getItem('cards') ?? '');
+
+  const [newCardOption, setNewCardOption] = useState<string>('');
+
+  const [editItemValue, setEditItemValue] = useState<string>('');
+
+  const [cardItems, setCardItems] = useState<CardItems[]>([]);
+
+  const inputsElements = document.getElementsByTagName('input');
 
   const addNewOption = (id: number) => {
     if (newCardOption === '') return;
@@ -58,7 +58,6 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
     );
 
     if (editItemValue === '') {
-      console.log(id, inputOfItem.id);
       if (inputOfItem.id === id.toString()) {
         inputOfItem.value = prevItem?.value || '';
       }
@@ -82,8 +81,21 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
 
   const [showMoveItem, setShowMoveItem] = useState<number[]>([]);
 
-  const moveItem = (id: number) => {
+  useEffect(() => {
+    console.log(cardItems);
+  }, [cardItems]);
+
+  const moveItem = (moveItemTo: number, id: number) => {
     setShowMoveItem((prev) => prev.filter((item) => item !== id));
+    const newItems = cardItems.map((item) => {
+      if (item.id === id) {
+        item.cardId = moveItemTo;
+      }
+      return item;
+    });
+    localStorage.setItem('cardItems', JSON.stringify(newItems));
+    setCardItems(newItems);
+    window.location.reload();
   };
 
   const ItemsRender = cardItems.map((item, index) => {
@@ -107,8 +119,9 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
                 {showMoveItem.includes(item.id) ? (
                   <select
                     className="bg-slate-200"
-                    onChange={() => {
-                      moveItem(item.id);
+                    value={options.id}
+                    onChange={(e) => {
+                      moveItem(+e.target.value, item.id);
                     }}
                   >
                     {cardsInfo.map((card: CardProperties, index: number) => {
