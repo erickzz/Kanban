@@ -11,7 +11,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
 
   const [cardItems, setCardItems] = useState<CardItems[]>([]);
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const itemsFromStorage = localStorage.getItem('cardItems');
@@ -50,7 +50,18 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
   };
 
   const editItem = (id: number) => {
-    if (editItemValue === '') return;
+    const prevItem: CardItems | undefined = cardItems.find(
+      (item) => item.id === id
+    );
+
+    if (editItemValue === '') {
+      if (inputRef.current) {
+        if (inputRef.current.id === id.toString()) {
+          inputRef.current.value = prevItem?.value || '';
+        }
+      }
+      return;
+    }
     const getItems = JSON.parse(localStorage.getItem('cardItems') ?? '');
     const newItems = getItems.map((item: { id: number; value: string }) => {
       if (item.id === id) {
