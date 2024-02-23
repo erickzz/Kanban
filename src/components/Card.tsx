@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { CardProperties, CardItems } from '../types';
 import { Trash, Pencil, ArrowLeftRight } from 'lucide-react';
 
@@ -11,7 +11,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
 
   const [cardItems, setCardItems] = useState<CardItems[]>([]);
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputsElements = document.getElementsByTagName('input');
 
   useEffect(() => {
     const itemsFromStorage = localStorage.getItem('cardItems');
@@ -50,16 +50,17 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
   };
 
   const editItem = (id: number) => {
+    const inputOfItem = inputsElements[id];
     const prevItem: CardItems | undefined = cardItems.find(
       (item) => item.id === id
     );
 
     if (editItemValue === '') {
-      if (inputRef.current) {
-        if (inputRef.current.id === id.toString()) {
-          inputRef.current.value = prevItem?.value || '';
-        }
+      console.log(id, inputOfItem.id);
+      if (inputOfItem.id === id.toString()) {
+        inputOfItem.value = prevItem?.value || '';
       }
+
       return;
     }
     const getItems = JSON.parse(localStorage.getItem('cardItems') ?? '');
@@ -73,13 +74,15 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
     localStorage.setItem('cardItems', JSON.stringify(newItems));
   };
 
-  const moveItem = (id: number) => {
-    console.log(id);
-  };
-
   const cardId = cardOptions.id;
   const itensNumber = cardItems.filter((item) => item.cardId === cardId).length;
   const height = 180 + 70 * itensNumber;
+
+  const [showMoveItem, setShowMoveItem] = useState(false);
+
+  const moveItem = (id: number) => {
+    setShowMoveItem(false);
+  };
 
   const ItemsRender = cardItems.map((item, index) => {
     if (item.cardId === cardOptions.id) {
@@ -88,7 +91,6 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
           <div className="flex justify-between align-middle">
             <input
               id={item.id.toString()}
-              ref={inputRef}
               defaultValue={item.value}
               className="bg-slate-200 w-2/4 cursor-default"
               onBlur={() => {
@@ -101,13 +103,26 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
             {/* {item.value} */}
             <div className="w-1/6 flex justify-end">
               <button>
-                <ArrowLeftRight
-                  size={20}
-                  className="text-zinc-500 hover:text-zinc-800 transition-colors"
-                  onClick={() => {
-                    moveItem(item.id);
-                  }}
-                />
+                {showMoveItem ? (
+                  <select
+                    className="bg-slate-200"
+                    onChange={() => {
+                      moveItem(item.id);
+                    }}
+                  >
+                    <option value="To Do">To Do</option>
+                    <option value="Doing">Doing</option>
+                    <option value="Done">Done</option>
+                  </select>
+                ) : (
+                  <ArrowLeftRight
+                    size={20}
+                    className="text-zinc-500 hover:text-zinc-800 transition-colors"
+                    onClick={() => {
+                      setShowMoveItem(true);
+                    }}
+                  />
+                )}
               </button>
               <button
                 className="px-4 h-auto w-2"
