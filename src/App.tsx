@@ -1,5 +1,5 @@
 import { Info, PlusCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CardProperties } from './types';
 import Card from './components/Card';
 
@@ -12,7 +12,7 @@ function App() {
   const defaultCards: CardProperties[] = [
     {
       id: 1,
-      title: 'To Do',
+      title: 'To Dos',
       description: 'Things I have to do',
       color: '#ae8fc7',
     },
@@ -29,6 +29,12 @@ function App() {
       color: '#f26e64',
     },
   ];
+
+  useEffect(() => {
+    if (storedCards.length === 0) {
+      localStorage.setItem('cards', JSON.stringify(defaultCards));
+    }
+  }, [storedCards]);
 
   const cards: CardProperties[] =
     storedCards.length > 0 ? storedCards : defaultCards;

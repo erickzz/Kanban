@@ -5,6 +5,8 @@ import { Trash, Pencil, ArrowLeftRight } from 'lucide-react';
 function Card({ cardOptions }: { cardOptions: CardProperties }) {
   const options = cardOptions;
 
+  const cardsInfo = JSON.parse(localStorage.getItem('cards'));
+
   const [newCardOption, setNewCardOption] = useState<string>('');
 
   const [editItemValue, setEditItemValue] = useState<string>('');
@@ -78,10 +80,10 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
   const itensNumber = cardItems.filter((item) => item.cardId === cardId).length;
   const height = 180 + 70 * itensNumber;
 
-  const [showMoveItem, setShowMoveItem] = useState(false);
+  const [showMoveItem, setShowMoveItem] = useState<number[]>([]);
 
   const moveItem = (id: number) => {
-    setShowMoveItem(false);
+    setShowMoveItem((prev) => prev.filter((item) => item !== id));
   };
 
   const ItemsRender = cardItems.map((item, index) => {
@@ -100,26 +102,29 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
                 setEditItemValue(e.target.value);
               }}
             />
-            {/* {item.value} */}
             <div className="w-1/6 flex justify-end">
               <button>
-                {showMoveItem ? (
+                {showMoveItem.includes(item.id) ? (
                   <select
                     className="bg-slate-200"
                     onChange={() => {
                       moveItem(item.id);
                     }}
                   >
-                    <option value="To Do">To Do</option>
-                    <option value="Doing">Doing</option>
-                    <option value="Done">Done</option>
+                    {cardsInfo.map((card: CardProperties, index: number) => {
+                      return (
+                        <option key={index} value={card.id}>
+                          {card.title}
+                        </option>
+                      );
+                    })}
                   </select>
                 ) : (
                   <ArrowLeftRight
                     size={20}
                     className="text-zinc-500 hover:text-zinc-800 transition-colors"
                     onClick={() => {
-                      setShowMoveItem(true);
+                      setShowMoveItem((prev) => [...prev, item.id]);
                     }}
                   />
                 )}
