@@ -5,7 +5,6 @@ import { CardItems } from './types';
 export function addNewOption(
   newCardOption: string,
   id: number,
-  cardItems: CardItems[],
   setCardItems: React.Dispatch<React.SetStateAction<CardItems[]>>
 ) {
   if (newCardOption === '') return;
@@ -27,10 +26,10 @@ export function addNewOption(
 
 export function deleteItem(
   id: number,
-  cardItems: CardItems[],
   setCardItems: React.Dispatch<React.SetStateAction<CardItems[]>>
 ) {
-  const newItems = cardItems.filter((i) => i.id !== id);
+    const items = JSON.parse(localStorage.getItem('cardItems') || '');
+  const newItems = items.filter((i: CardItems) => i.id !== id);
   localStorage.setItem('cardItems', JSON.stringify(newItems));
   setCardItems(newItems);
 }
@@ -38,7 +37,6 @@ export function deleteItem(
 export function editItem(
   id: number,
   editItemValue: string,
-  cardItems: CardItems[],
   setCardItems: React.Dispatch<React.SetStateAction<CardItems[]>>
 ) {
   const getItems = JSON.parse(localStorage.getItem('cardItems') || '');

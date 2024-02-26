@@ -1,6 +1,7 @@
-// Card.tsx
+// Limpar o input de um item após adicionar
+// Delete está bugando ao deletar itens de cards diferentes
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Trash, Pencil, ArrowLeftRight } from 'lucide-react';
 import { CardProperties, CardItems } from '../types';
 import { addNewOption, deleteItem, editItem, moveItem } from '../CardFunctions';
@@ -55,7 +56,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
               defaultValue={item.value}
               className="bg-slate-200 w-2/4 cursor-default p-2 focus:outline-double rounded"
               onBlur={() => {
-                editItem(item.id, editItemValue, cardItems, setCardItems);
+                editItem(item.id, editItemValue, setCardItems);
               }}
               onChange={(e) => {
                 setEditItemValue(e.target.value);
@@ -118,7 +119,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
               <button
                 className="p-2 h-auto w-auto"
                 onClick={() => {
-                  deleteItem(item.id, cardItems, setCardItems);
+                  deleteItem(item.id, setCardItems);
                 }}
               >
                 <Trash
@@ -151,12 +152,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
           <button
             className="bg-none border-2 border-white rounded px-4 h-10 text-sm text-white self-end w-2/6 hover:bg-white hover:text-black transition-colors"
             onClick={() => {
-              addNewOption(
-                newCardOption,
-                cardOptions.id,
-                cardItems,
-                setCardItems
-              );
+              addNewOption(newCardOption, cardOptions.id, setCardItems);
             }}
           >
             Add new
