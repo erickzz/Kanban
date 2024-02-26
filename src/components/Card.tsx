@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
-import { CardProperties, CardItems } from '../types';
+// Card.tsx
+
+import React, { useState, useEffect } from 'react';
 import { Trash, Pencil, ArrowLeftRight } from 'lucide-react';
+import { CardProperties, CardItems } from '../types';
+import { addNewOption, deleteItem, editItem, moveItem } from '../CardFunctions';
 
 function Card({ cardOptions }: { cardOptions: CardProperties }) {
   useEffect(() => {
@@ -12,87 +15,22 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
     }
   }, []);
 
-  const options = cardOptions;
-
-  const cardsInfo = JSON.parse(localStorage.getItem('cards') ?? '');
-
   const [newCardOption, setNewCardOption] = useState<string>('');
-
   const [editItemValue, setEditItemValue] = useState<string>('');
-
   const [cardItems, setCardItems] = useState<CardItems[]>([]);
-
-  const inputsElements = document.getElementsByTagName('input');
-
-  const addNewOption = (id: number) => {
-    if (newCardOption === '') return;
-    setNewCardOption('');
-    const itemsFromStorage = JSON.parse(
-      localStorage.getItem('cardItems') ?? ''
-    );
-    const newItem: CardItems = {
-      id: Math.random() * 100,
-      cardId: id,
-      value: newCardOption,
-    };
-    if (itemsFromStorage === null) {
-      localStorage.setItem('cardItems', JSON.stringify([newItem]));
-      setCardItems([newItem]);
-    } else {
-      itemsFromStorage.push(newItem);
-      localStorage.setItem('cardItems', JSON.stringify(itemsFromStorage));
-      setCardItems(itemsFromStorage);
-    }
-  };
-
-  const deleteItem = (id: number) => {
-    const newItems = cardItems.filter((i) => i.id !== id);
-    localStorage.setItem('cardItems', JSON.stringify(newItems));
-    setCardItems(newItems);
-  };
-
-  const editItem = (id: number) => {
-    const inputOfItem = inputsElements[id];
-    const prevItem: CardItems | undefined = cardItems.find(
-      (item) => item.id === id
-    );
-
-    if (editItemValue === '') {
-      if (inputOfItem.id === id.toString()) {
-        inputOfItem.value = prevItem?.value || '';
-      }
-
-      return;
-    }
-    const getItems = JSON.parse(localStorage.getItem('cardItems') ?? '');
-    const newItems = getItems.map((item: { id: number; value: string }) => {
-      if (item.id === id) {
-        item.value = editItemValue;
-      }
-      return item;
-    });
-    setCardItems(newItems);
-    localStorage.setItem('cardItems', JSON.stringify(newItems));
-  };
-
+  const cards = JSON.parse(localStorage.getItem('cards') as string);
   const cardId = cardOptions.id;
   const itensNumber = cardItems.filter((item) => item.cardId === cardId).length;
   const height = 180 + 70 * itensNumber;
-
   const [showMoveItem, setShowMoveItem] = useState<number[]>([]);
+  const [reload, setReload] = useState<boolean>(false);
 
-  const moveItem = (moveItemTo: number, id: number) => {
-    setShowMoveItem((prev) => prev.filter((item) => item !== id));
-    const newItems = cardItems.map((item) => {
-      if (item.id === id) {
-        item.cardId = moveItemTo;
-      }
-      return item;
-    });
-    localStorage.setItem('cardItems', JSON.stringify(newItems));
-    setCardItems(newItems);
-    window.location.reload();
-  };
+  useEffect(() => {
+    if (reload) {
+      window.location.reload();
+    }
+    setReload(false);
+  }, [reload]);
 
   useEffect(() => {
     if (showMoveItem.length > 0) {
@@ -117,7 +55,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
               defaultValue={item.value}
               className="bg-slate-200 w-2/4 cursor-default p-2 focus:outline-double rounded"
               onBlur={() => {
-                editItem(item.id);
+                editItem(item.id, editItemValue, cardItems, setCardItems);
               }}
               onChange={(e) => {
                 setEditItemValue(e.target.value);
@@ -129,9 +67,15 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
                   <select
                     className="bg-slate-200 focus:outline-none w-auto rounded px-2 transition-colors hover:bg-white hover:text-black"
                     id={item.id.toString()}
-                    value={options.id}
+                    value={cardOptions.id}
                     onChange={(e) => {
-                      moveItem(+e.target.value, item.id);
+                      moveItem(
+                        +e.target.value,
+                        item.id,
+                        cardItems,
+                        setCardItems,
+                        setReload
+                      );
                     }}
                     onBlur={() => {
                       setShowMoveItem((prev) =>
@@ -139,12 +83,14 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
                       );
                     }}
                   >
-                    {cardsInfo.map((card: CardProperties, index: number) => {
-                      return (
-                        <option key={index} value={card.id}>
-                          {card.title}
-                        </option>
-                      );
+                    {cards.map((card: CardProperties) => {
+                      if (card.id !== cardOptions.id) {
+                        return (
+                          <option key={card.id} value={card.id}>
+                            {card.title}
+                          </option>
+                        );
+                      }
                     })}
                   </select>
                 ) : (
@@ -161,7 +107,6 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
                 className="p-2 h-auto w-auto"
                 onClick={() => {
                   const input = document.getElementById(item.id.toString());
-                  console.log(input);
                   input?.focus();
                 }}
               >
@@ -173,7 +118,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
               <button
                 className="p-2 h-auto w-auto"
                 onClick={() => {
-                  deleteItem(item.id);
+                  deleteItem(item.id, cardItems, setCardItems);
                 }}
               >
                 <Trash
@@ -193,8 +138,8 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
       className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5`}
       style={{ backgroundColor: cardOptions.color, height: `${height}px` }}
     >
-      <h3 className="text-xl font-semibold ">{options.title}</h3>
-      <p className="">{options.description}</p>
+      <h3 className="text-xl font-semibold ">{cardOptions.title}</h3>
+      <p className="">{cardOptions.description}</p>
       <ul>
         {ItemsRender}
         <div className="flex h-auto w-auto  ">
@@ -206,7 +151,12 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
           <button
             className="bg-none border-2 border-white rounded px-4 h-10 text-sm text-white self-end w-2/6 hover:bg-white hover:text-black transition-colors"
             onClick={() => {
-              addNewOption(options.id);
+              addNewOption(
+                newCardOption,
+                cardOptions.id,
+                cardItems,
+                setCardItems
+              );
             }}
           >
             Add new
