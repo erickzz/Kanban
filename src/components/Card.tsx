@@ -115,7 +115,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
             <input
               id={item.id.toString()}
               defaultValue={item.value}
-              className="bg-slate-200 w-2/4 cursor-default"
+              className="bg-slate-200 w-2/4 cursor-default p-2 focus:outline-double rounded"
               onBlur={() => {
                 editItem(item.id);
               }}
@@ -124,7 +124,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
               }}
             />
             <div className="w-1/6 flex justify-end">
-              <button>
+              <button className="p-2 h-auto w-auto">
                 {showMoveItem.includes(item.id) ? (
                   <select
                     className="bg-slate-200 focus:outline-none w-auto rounded px-2 transition-colors hover:bg-white hover:text-black"
@@ -158,7 +158,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
                 )}
               </button>
               <button
-                className="px-4 h-auto w-2"
+                className="p-2 h-auto w-auto"
                 onClick={() => {
                   const input = document.getElementById(item.id.toString());
                   console.log(input);
@@ -171,7 +171,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
                 />
               </button>
               <button
-                className="px-4 h-auto w-2 mr-2"
+                className="p-2 h-auto w-auto"
                 onClick={() => {
                   deleteItem(item.id);
                 }}
