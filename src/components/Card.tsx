@@ -81,10 +81,6 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
 
   const [showMoveItem, setShowMoveItem] = useState<number[]>([]);
 
-  useEffect(() => {
-    console.log(cardItems);
-  }, [cardItems]);
-
   const moveItem = (moveItemTo: number, id: number) => {
     setShowMoveItem((prev) => prev.filter((item) => item !== id));
     const newItems = cardItems.map((item) => {
@@ -97,6 +93,22 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
     setCardItems(newItems);
     window.location.reload();
   };
+
+  const [selectElements, setSelectElements] = useState<HTMLElement[]>([]);
+
+  useEffect(() => {
+    if (showMoveItem.length > 0) {
+      const selectElements = Array.from(
+        document.getElementsByTagName('select')
+      );
+      selectElements.filter((select) => {
+        if (showMoveItem.includes(+select.id)) {
+          select.focus();
+        }
+      });
+      setSelectElements(selectElements);
+    }
+  }, [showMoveItem]);
 
   const ItemsRender = cardItems.map((item, index) => {
     if (item.cardId === cardOptions.id) {
@@ -118,10 +130,16 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
               <button>
                 {showMoveItem.includes(item.id) ? (
                   <select
-                    className="bg-slate-200"
+                    className="bg-slate-200 focus:outline-none w-auto rounded h-10 px-2 transition-colors hover:bg-white hover:text-black"
+                    id={item.id.toString()}
                     value={options.id}
                     onChange={(e) => {
                       moveItem(+e.target.value, item.id);
+                    }}
+                    onBlur={() => {
+                      setShowMoveItem((prev) =>
+                        prev.filter((i) => i !== item.id)
+                      );
                     }}
                   >
                     {cardsInfo.map((card: CardProperties, index: number) => {
