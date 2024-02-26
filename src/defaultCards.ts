@@ -3,7 +3,7 @@ import { CardProperties } from "./types";
 const defaultCards: CardProperties[] = [{
         id: 1,
         title: 'Para fazer 😅',
-        description: 'Lista de coisa a fazer',
+        description: 'Lista de coisas que estou planejando fazer',
         color: '#ae8fc7',
       },
       {

@@ -66,7 +66,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
               <button className="p-2 h-auto w-auto">
                 {showMoveItem.includes(item.id) ? (
                   <select
-                    className="bg-slate-200 focus:outline-none w-auto rounded px-2 transition-colors hover:bg-white hover:text-black"
+                    className="bg-slate-200 focus:outline-none w-auto rounded px-2 transition-colors hover:bg-white hover:text-black sm:w-2/6"
                     id={item.id.toString()}
                     value={cardOptions.id}
                     onChange={(e) => {
@@ -85,13 +85,11 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
                     }}
                   >
                     {cards.map((card: CardProperties) => {
-                      if (card.id !== cardOptions.id) {
-                        return (
-                          <option key={card.id} value={card.id}>
-                            {card.title}
-                          </option>
-                        );
-                      }
+                      return (
+                        <option key={card.id} value={card.id}>
+                          {card.title}
+                        </option>
+                      );
                     })}
                   </select>
                 ) : (
@@ -150,9 +148,10 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
             value={newCardOption}
           />
           <button
-            className="bg-none border-2 border-white rounded px-4 h-10 text-sm text-white self-end w-2/6 hover:bg-white hover:text-black transition-colors"
+            className="bg-none border-2 border-white rounded px-4 h-10 text-sm text-white self-end w-1/2 hover:bg-white hover:text-black transition-colors"
             onClick={() => {
               addNewOption(newCardOption, cardOptions.id, setCardItems);
+              setNewCardOption('');
             }}
           >
             Add new
