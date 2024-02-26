@@ -94,8 +94,6 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
     window.location.reload();
   };
 
-  const [selectElements, setSelectElements] = useState<HTMLElement[]>([]);
-
   useEffect(() => {
     if (showMoveItem.length > 0) {
       const selectElements = Array.from(
@@ -106,7 +104,6 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
           select.focus();
         }
       });
-      setSelectElements(selectElements);
     }
   }, [showMoveItem]);
 
@@ -130,7 +127,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
               <button>
                 {showMoveItem.includes(item.id) ? (
                   <select
-                    className="bg-slate-200 focus:outline-none w-auto rounded h-10 px-2 transition-colors hover:bg-white hover:text-black"
+                    className="bg-slate-200 focus:outline-none w-auto rounded px-2 transition-colors hover:bg-white hover:text-black"
                     id={item.id.toString()}
                     value={options.id}
                     onChange={(e) => {
