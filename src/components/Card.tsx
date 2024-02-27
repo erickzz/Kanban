@@ -62,6 +62,16 @@ function Card({
               defaultValue={item.value}
               className="bg-slate-200 w-2/4 cursor-default p-2 focus:outline-double rounded"
               onBlur={() => {
+                if (editItemValue === '') {
+                  console.log(cardItems);
+                  (document.getElementById(
+                    item.id.toString()
+                  ) as HTMLInputElement)!.value = cardItems.find(
+                    (i) => i.id === item.id
+                  )?.value as string;
+                  return;
+                }
+
                 editItem(item.id, editItemValue, setCardItems);
               }}
               onChange={(e) => {
