@@ -55,7 +55,14 @@ function Card({
   const ItemsRender = cardItems.map((item, index) => {
     if (item.cardId === cardOptions.id) {
       return (
-        <li key={index} className="p-2 bg-slate-200 rounded mt-4">
+        <li
+          key={index}
+          className="p-2 bg-slate-200 rounded mt-4"
+          draggable="true"
+          onDragStart={(e) => {
+            e.dataTransfer.setData('text/plain', item.id.toString());
+          }}
+        >
           <div className="flex justify-between align-middle">
             <input
               id={item.id.toString()}
@@ -152,6 +159,15 @@ function Card({
     <div
       className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5`}
       style={{ backgroundColor: cardOptions.color, height: `${height}px` }}
+      onDragOver={(e) => {
+        e.preventDefault();
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        const id = e.dataTransfer.getData('text/plain');
+        console.log(id);
+        moveItem(cardOptions.id, +id, cardItems, setCardItems, setReload);
+      }}
     >
       <div className="flex justify-between">
         <h3 className="text-xl font-semibold ">{cardOptions.title}</h3>
