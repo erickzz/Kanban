@@ -1,5 +1,5 @@
 import { Info, PlusCircle } from 'lucide-react';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, FormEvent } from 'react';
 import { CardProperties } from './types';
 import defaultCards from './defaultCards';
 import Card from './components/Card';
@@ -19,15 +19,89 @@ function App() {
   const cards: CardProperties[] =
     storedCards.length > 0 ? storedCards : defaultCards;
 
-  const [cardsState] = useState<CardProperties[]>(cards);
+  const [cardsState, setCardsState] = useState<CardProperties[]>(cards);
 
   const [showMessage, setShowMessage] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
+
+  const [cardToEditId, setCardToEditId] = useState<number>(0);
+
+  const editMode = (id: number) => {
+    showModal ? setShowModal(false) : setShowModal(true);
+    setCardToEditId(id);
+  };
+
+  const editCard = (newCard: {
+    cardTitle: string;
+    cardDescription: string;
+  }) => {
+    console.log(cardToEditId);
+    console.log(newCard);
+    const newCards = cardsState.map((card) => {
+      if (card.id === cardToEditId) {
+        card.title = newCard.cardTitle;
+        card.description = newCard.cardDescription;
+      }
+      return card;
+    });
+    console.log(newCards);
+    setCardsState(newCards);
+    localStorage.setItem('cards', JSON.stringify(newCards));
+  };
+
+  const modal = (
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+      onClick={() => setShowModal(false)}
+    >
+      <div
+        className="bg-white p-4 rounded-lg w-1/4 text-black"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <form
+          onSubmit={(event: FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            const card = {
+              cardTitle: (event.target as HTMLFormElement).cardTitle.value,
+              cardDescription: (event.target as HTMLFormElement).description
+                .value,
+            };
+            setShowModal(false);
+            if (card.cardTitle === '' || card.cardDescription === '') return;
+            editCard(card);
+          }}
+        >
+          <h2>Adicionar novo card</h2>
+          <input
+            type="text"
+            placeholder="Nome do card"
+            name="cardTitle"
+            className="border-2 border-slate-300 p-2 rounded-lg w-full mt-4"
+          />
+          <input
+            type="text"
+            placeholder="Descrição do card"
+            name="description"
+            className="border-2 border-slate-300 p-2 rounded-lg w-full mt-4"
+          />
+          <button
+            className="bg-slate-200 p-2 rounded-lg w-full mt-4 hover:bg-green-500 transition-colors text-white"
+            type="submit"
+          >
+            Adicionar
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 
   return (
     <div className="w-screen h-screen bg-zinc-800">
       <div className="p-10 mr-10 text-white text-2xl flex justify-between ">
         <h2>Kanban</h2>
         <div className="flex items-center gap-4 w-auto h-12">
+          {showModal && modal}
           {showMessage && (
             <div className="bg-slate-200 opacity-80 w-auto rounded text-black p-4 flex flex-col justify-center">
               <p className="text-xs ">
@@ -51,7 +125,7 @@ function App() {
       </div>
       <div className="flex ">
         {cardsState.map((card, index) => (
-          <Card key={index} cardOptions={card} />
+          <Card key={index} cardOptions={card} editCard={editMode} />
         ))}
         <div
           className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5 flex justify-center items-center`}

@@ -6,7 +6,13 @@ import { Trash, Pencil, ArrowLeftRight } from 'lucide-react';
 import { CardProperties, CardItems } from '../types';
 import { addNewOption, deleteItem, editItem, moveItem } from '../CardFunctions';
 
-function Card({ cardOptions }: { cardOptions: CardProperties }) {
+function Card({
+  cardOptions,
+  editCard,
+}: {
+  cardOptions: CardProperties;
+  editCard: (id: number) => void;
+}) {
   useEffect(() => {
     const itemsFromStorage = localStorage.getItem('cardItems');
     if (itemsFromStorage === null) {
@@ -66,7 +72,7 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
               <button className="p-2 h-auto w-auto">
                 {showMoveItem.includes(item.id) ? (
                   <select
-                    className="bg-slate-200 focus:outline-none w-auto rounded px-2 transition-colors hover:bg-white hover:text-black sm:w-2/6"
+                    className="bg-slate-200 w-auto focus:outline-none rounded px-2 transition-colors hover:bg-white hover:text-black"
                     id={item.id.toString()}
                     value={cardOptions.id}
                     onChange={(e) => {
@@ -137,7 +143,15 @@ function Card({ cardOptions }: { cardOptions: CardProperties }) {
       className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5`}
       style={{ backgroundColor: cardOptions.color, height: `${height}px` }}
     >
-      <h3 className="text-xl font-semibold ">{cardOptions.title}</h3>
+      <div className="flex justify-between">
+        <h3 className="text-xl font-semibold ">{cardOptions.title}</h3>
+        <Pencil
+          className="text-zinc-800 cursor-pointer"
+          onClick={() => {
+            editCard(cardOptions.id);
+          }}
+        />
+      </div>
       <p className="">{cardOptions.description}</p>
       <ul>
         {ItemsRender}
