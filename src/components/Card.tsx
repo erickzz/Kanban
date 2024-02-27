@@ -9,9 +9,13 @@ import { addNewOption, deleteItem, editItem, moveItem } from '../CardFunctions';
 function Card({
   cardOptions,
   editCard,
+  cardItems,
+  setCardItems,
 }: {
   cardOptions: CardProperties;
   editCard: (id: number) => void;
+  cardItems: CardItems[];
+  setCardItems: React.Dispatch<React.SetStateAction<CardItems[]>>;
 }) {
   useEffect(() => {
     const itemsFromStorage = localStorage.getItem('cardItems');
@@ -24,7 +28,6 @@ function Card({
 
   const [newCardOption, setNewCardOption] = useState<string>('');
   const [editItemValue, setEditItemValue] = useState<string>('');
-  const [cardItems, setCardItems] = useState<CardItems[]>([]);
   const cards = JSON.parse(localStorage.getItem('cards') as string);
   const cardId = cardOptions.id;
   const itensNumber = cardItems.filter((item) => item.cardId === cardId).length;
@@ -97,8 +100,7 @@ function Card({
                         +e.target.value,
                         item.id,
                         cardItems,
-                        setCardItems,
-                        setReload
+                        setCardItems
                       );
                     }}
                     onBlur={() => {
@@ -165,8 +167,7 @@ function Card({
       onDrop={(e) => {
         e.preventDefault();
         const id = e.dataTransfer.getData('text/plain');
-        console.log(id);
-        moveItem(cardOptions.id, +id, cardItems, setCardItems, setReload);
+        moveItem(cardOptions.id, +id, cardItems, setCardItems);
       }}
     >
       <div className="flex justify-between">

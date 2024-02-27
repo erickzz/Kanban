@@ -55,7 +55,6 @@ export function moveItem(
   id: number,
   cardItems: CardItems[],
   setCardItems: React.Dispatch<React.SetStateAction<CardItems[]>>,
-  setReload: React.Dispatch<React.SetStateAction<boolean>>
 ) {
 
   const newItems = cardItems.map((item) => {
@@ -66,5 +65,4 @@ export function moveItem(
   });
   localStorage.setItem('cardItems', JSON.stringify(newItems));
   setCardItems(newItems);
-  setReload(true);
 }

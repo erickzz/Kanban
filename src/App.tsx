@@ -1,6 +1,6 @@
 import { Info, PlusCircle, XCircle } from 'lucide-react';
 import { useState, useEffect, useMemo, FormEvent } from 'react';
-import { CardProperties } from './types';
+import { CardItems, CardProperties } from './types';
 import defaultCards from './defaultCards';
 import Card from './components/Card';
 
@@ -20,6 +20,8 @@ function App() {
     storedCards.length > 0 ? storedCards : defaultCards;
 
   const [cardsState, setCardsState] = useState<CardProperties[]>(cards);
+
+  const [cardItems, setCardItems] = useState<CardItems[]>([]);
 
   const [showMessage, setShowMessage] = useState(false);
 
@@ -146,7 +148,13 @@ function App() {
       </div>
       <div className="flex ">
         {cardsState.map((card, index) => (
-          <Card key={index} cardOptions={card} editCard={editMode} />
+          <Card
+            key={index}
+            cardOptions={card}
+            editCard={editMode}
+            cardItems={cardItems}
+            setCardItems={setCardItems}
+          />
         ))}
         <div
           className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5 flex justify-center items-center`}
