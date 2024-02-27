@@ -1,4 +1,4 @@
-import { Info, PlusCircle } from 'lucide-react';
+import { Info, PlusCircle, XCircle } from 'lucide-react';
 import { useState, useEffect, useMemo, FormEvent } from 'react';
 import { CardProperties } from './types';
 import defaultCards from './defaultCards';
@@ -26,10 +26,21 @@ function App() {
   const [showModal, setShowModal] = useState(false);
 
   const [cardToEditId, setCardToEditId] = useState<number>(0);
+  const [cardToEdit, setCardToEdit] = useState<{
+    cardName: string;
+    cardDescription: string;
+  }>();
 
   const editMode = (id: number) => {
     showModal ? setShowModal(false) : setShowModal(true);
     setCardToEditId(id);
+    const cardToEdit = cardsState.find((card) => card.id === id);
+    if (cardToEdit) {
+      setCardToEdit({
+        cardName: cardToEdit.title,
+        cardDescription: cardToEdit.description,
+      });
+    }
   };
 
   const editCard = (newCard: {
@@ -72,18 +83,28 @@ function App() {
             editCard(card);
           }}
         >
-          <h2>Adicionar novo card</h2>
+          <div className="flex justify-between">
+            <h2>Editar card</h2>
+            <XCircle
+              className="cursor-pointer"
+              onClick={() => {
+                setShowModal(false);
+              }}
+            />
+          </div>
           <input
             type="text"
             placeholder="Nome do card"
             name="cardTitle"
             className="border-2 border-slate-300 p-2 rounded-lg w-full mt-4"
+            defaultValue={cardToEdit?.cardName}
           />
           <input
             type="text"
             placeholder="Descrição do card"
             name="description"
             className="border-2 border-slate-300 p-2 rounded-lg w-full mt-4"
+            defaultValue={cardToEdit?.cardDescription}
           />
           <button
             className="bg-slate-200 p-2 rounded-lg w-full mt-4 hover:bg-green-500 transition-colors text-white"
