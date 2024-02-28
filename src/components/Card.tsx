@@ -76,7 +76,7 @@ function Card({
                 }
 
                 editItem(item.id, editItemValue, setCardItems);
-                notify('Item edited', 'success');
+                notify('Item editado!', 'success');
               }}
               onChange={(e) => {
                 setEditItemValue(e.target.value);
@@ -137,7 +137,7 @@ function Card({
                 className="p-2 h-auto w-auto"
                 onClick={() => {
                   deleteItem(item.id, setCardItems);
-                  notify('Item deleted', 'error');
+                  notify('Item deletado!', 'error');
                 }}
               >
                 <Trash
