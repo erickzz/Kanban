@@ -167,7 +167,7 @@ function App() {
   };
 
   return (
-    <div className="w-screen h-screen bg-zinc-800">
+    <div className="w-full min-h-screen bg-zinc-800 overflow-y-hidden">
       <div className="p-10 mr-10 text-white text-2xl flex justify-between ">
         <h2>Kanban</h2>
         <div className="flex items-center gap-4 w-auto h-12">
