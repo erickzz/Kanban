@@ -147,7 +147,7 @@ function App() {
             />
           </div>
           <button
-            className="bg-green-00 p-2 rounded-lg w-full mt-4 hover:bg-green-500 transition-colors text-white"
+            className="bg-green-200 p-2 rounded-lg w-full mt-4 hover:bg-green-500 transition-colors text-white"
             type="submit"
           >
             Adicionar
