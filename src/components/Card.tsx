@@ -12,12 +12,14 @@ function Card({
   cardItems,
   setCardItems,
   notify,
+  removeCard,
 }: {
   cardOptions: CardProperties;
   editCard: (id: number) => void;
   cardItems: CardItems[];
   setCardItems: React.Dispatch<React.SetStateAction<CardItems[]>>;
   notify: (message: string) => void;
+  removeCard: (id: number) => void;
 }) {
   useEffect(() => {
     const itemsFromStorage = localStorage.getItem('cardItems');
@@ -172,12 +174,20 @@ function Card({
     >
       <div className="flex justify-between">
         <h3 className="text-xl font-semibold ">{cardOptions.title}</h3>
-        <Pencil
-          className="text-zinc-800 cursor-pointer"
-          onClick={() => {
-            editCard(cardOptions.id);
-          }}
-        />
+        <div className="flex gap-4">
+          <Pencil
+            className="text-zinc-800 cursor-pointer hover:text-slate-200 transition-colors"
+            onClick={() => {
+              editCard(cardOptions.id);
+            }}
+          />
+          <Trash
+            className="text-zinc-800 cursor-pointer hover:text-slate-200 transition-colors"
+            onClick={() => {
+              removeCard(cardOptions.id);
+            }}
+          />
+        </div>
       </div>
       <p className="">{cardOptions.description}</p>
       <ul>

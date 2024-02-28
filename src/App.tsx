@@ -75,6 +75,23 @@ function App() {
     localStorage.setItem('cards', JSON.stringify(newCards));
   };
 
+  const addCard = () => {
+    const newCard = {
+      id: cardsState.length + 1,
+      title: 'Novo card',
+      description: 'Descrição do card',
+      color: '#2D7D9A',
+    };
+    setCardsState([...cardsState, newCard]);
+    localStorage.setItem('cards', JSON.stringify([...cardsState, newCard]));
+  };
+
+  const removeCard = (id: number) => {
+    const newCards = cardsState.filter((card) => card.id !== id);
+    setCardsState(newCards);
+    localStorage.setItem('cards', JSON.stringify(newCards));
+  };
+
   const modal = (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
@@ -196,7 +213,7 @@ function App() {
           />
         </div>
       </div>
-      <div className="flex ">
+      <div className="flex flex-wrap ">
         {cardsState.map((card, index) => (
           <Card
             key={index}
@@ -205,13 +222,18 @@ function App() {
             cardItems={cardItems}
             setCardItems={setCardItems}
             notify={notify}
+            removeCard={removeCard}
           />
         ))}
         <div
           className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5 flex justify-center items-center`}
-          style={{ backgroundColor: 'transparent', height: `320px` }}
+          style={{ backgroundColor: 'transparent', height: `180px` }}
         >
-          <PlusCircle size={80} className="text-slate-200 cursor-pointer" />
+          <PlusCircle
+            size={80}
+            className="text-slate-200 cursor-pointer"
+            onClick={addCard}
+          />
         </div>
       </div>
     </div>
