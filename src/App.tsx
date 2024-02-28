@@ -37,9 +37,14 @@ function App() {
     color: string;
   }>();
 
+  const [color, setColor] = useState({ hex: '#FFFFFF' });
+
   const editMode = (id: number) => {
     showModal ? setShowModal(false) : setShowModal(true);
     setCardToEditId(id);
+    setColor({
+      hex: cardsState.find((card) => card.id === id)?.color || '#FFFFFF',
+    });
     const cardToEdit = cardsState.find((card) => card.id === id);
     if (cardToEdit) {
       setCardToEdit({
@@ -69,8 +74,6 @@ function App() {
     setCardsState(newCards);
     localStorage.setItem('cards', JSON.stringify(newCards));
   };
-
-  const [color, setColor] = useState({ hex: '#FFFFFF' });
 
   const modal = (
     <div
@@ -120,7 +123,7 @@ function App() {
           />
           <div className="m-4">
             <SliderPicker
-              color={cardToEdit?.color ? cardToEdit.color : color.hex}
+              color={color}
               onChange={(color: SetStateAction<{ hex: string }>) => {
                 setColor(color);
               }}
