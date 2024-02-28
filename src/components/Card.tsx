@@ -1,6 +1,3 @@
-// Limpar o input de um item após adicionar
-// Delete está bugando ao deletar itens de cards diferentes
-
 import { useState, useEffect } from 'react';
 import { Trash, Pencil, ArrowLeftRight } from 'lucide-react';
 import { CardProperties, CardItems } from '../types';
@@ -18,7 +15,7 @@ function Card({
   editCard: (id: number) => void;
   cardItems: CardItems[];
   setCardItems: React.Dispatch<React.SetStateAction<CardItems[]>>;
-  notify: (message: string) => void;
+  notify: (message: string, type: string) => void;
   removeCard: (id: number) => void;
 }) {
   useEffect(() => {

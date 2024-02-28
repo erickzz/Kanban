@@ -5,7 +5,7 @@ import { CardItems, CardProperties } from './types';
 import defaultCards from './defaultCards';
 import Card from './components/Card';
 import 'react-toastify/dist/ReactToastify.css';
-import { SliderPicker } from 'react-color';
+import { Color, SliderPicker } from 'react-color';
 
 function App() {
   const storedCardsJson = localStorage.getItem('cards');
@@ -140,14 +140,14 @@ function App() {
           />
           <div className="m-4">
             <SliderPicker
-              color={color}
+              color={color as unknown as Color | undefined}
               onChange={(color: SetStateAction<{ hex: string }>) => {
                 setColor(color);
               }}
             />
           </div>
           <button
-            className="bg-green-100 p-2 rounded-lg w-full mt-4 hover:bg-green-500 transition-colors text-white"
+            className="bg-green-00 p-2 rounded-lg w-full mt-4 hover:bg-green-500 transition-colors text-white"
             type="submit"
           >
             Adicionar
