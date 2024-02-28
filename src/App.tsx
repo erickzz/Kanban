@@ -1,8 +1,11 @@
 import { Info, PlusCircle, XCircle } from 'lucide-react';
-import { useState, useEffect, useMemo, FormEvent } from 'react';
+import { useState, useEffect, useMemo, FormEvent, SetStateAction } from 'react';
+import { Bounce, toast } from 'react-toastify';
 import { CardItems, CardProperties } from './types';
 import defaultCards from './defaultCards';
 import Card from './components/Card';
+import 'react-toastify/dist/ReactToastify.css';
+import { SliderPicker } from 'react-color';
 
 function App() {
   const storedCardsJson = localStorage.getItem('cards');
@@ -31,6 +34,7 @@ function App() {
   const [cardToEdit, setCardToEdit] = useState<{
     cardName: string;
     cardDescription: string;
+    color: string;
   }>();
 
   const editMode = (id: number) => {
@@ -41,6 +45,7 @@ function App() {
       setCardToEdit({
         cardName: cardToEdit.title,
         cardDescription: cardToEdit.description,
+        color: cardToEdit.color,
       });
     }
   };
@@ -48,6 +53,7 @@ function App() {
   const editCard = (newCard: {
     cardTitle: string;
     cardDescription: string;
+    color: string;
   }) => {
     console.log(cardToEditId);
     console.log(newCard);
@@ -55,6 +61,7 @@ function App() {
       if (card.id === cardToEditId) {
         card.title = newCard.cardTitle;
         card.description = newCard.cardDescription;
+        card.color = color.hex;
       }
       return card;
     });
@@ -62,6 +69,8 @@ function App() {
     setCardsState(newCards);
     localStorage.setItem('cards', JSON.stringify(newCards));
   };
+
+  const [color, setColor] = useState({ hex: '#FFFFFF' });
 
   const modal = (
     <div
@@ -79,6 +88,7 @@ function App() {
               cardTitle: (event.target as HTMLFormElement).cardTitle.value,
               cardDescription: (event.target as HTMLFormElement).description
                 .value,
+              color: color.hex,
             };
             setShowModal(false);
             if (card.cardTitle === '' || card.cardDescription === '') return;
@@ -108,6 +118,14 @@ function App() {
             className="border-2 border-slate-300 p-2 rounded-lg w-full mt-4"
             defaultValue={cardToEdit?.cardDescription}
           />
+          <div className="m-4">
+            <SliderPicker
+              color={cardToEdit?.color ? cardToEdit.color : color.hex}
+              onChange={(color: SetStateAction<{ hex: string }>) => {
+                setColor(color);
+              }}
+            />
+          </div>
           <button
             className="bg-slate-200 p-2 rounded-lg w-full mt-4 hover:bg-green-500 transition-colors text-white"
             type="submit"
@@ -118,6 +136,35 @@ function App() {
       </div>
     </div>
   );
+
+  const notify = (message: string, type: string) => {
+    console.log('TOAST TRIGGERED');
+    if (type === 'error') {
+      toast.error(message, {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce,
+      });
+    } else if (type === 'success') {
+      toast.success(message, {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce,
+      });
+    }
+  };
 
   return (
     <div className="w-screen h-screen bg-zinc-800">
@@ -154,6 +201,7 @@ function App() {
             editCard={editMode}
             cardItems={cardItems}
             setCardItems={setCardItems}
+            notify={notify}
           />
         ))}
         <div

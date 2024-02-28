@@ -11,11 +11,13 @@ function Card({
   editCard,
   cardItems,
   setCardItems,
+  notify,
 }: {
   cardOptions: CardProperties;
   editCard: (id: number) => void;
   cardItems: CardItems[];
   setCardItems: React.Dispatch<React.SetStateAction<CardItems[]>>;
+  notify: (message: string) => void;
 }) {
   useEffect(() => {
     const itemsFromStorage = localStorage.getItem('cardItems');
@@ -33,14 +35,6 @@ function Card({
   const itensNumber = cardItems.filter((item) => item.cardId === cardId).length;
   const height = 180 + 70 * itensNumber;
   const [showMoveItem, setShowMoveItem] = useState<number[]>([]);
-  const [reload, setReload] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (reload) {
-      window.location.reload();
-    }
-    setReload(false);
-  }, [reload]);
 
   useEffect(() => {
     if (showMoveItem.length > 0) {
@@ -83,6 +77,7 @@ function Card({
                 }
 
                 editItem(item.id, editItemValue, setCardItems);
+                notify('Item edited', 'success');
               }}
               onChange={(e) => {
                 setEditItemValue(e.target.value);
@@ -143,6 +138,7 @@ function Card({
                 className="p-2 h-auto w-auto"
                 onClick={() => {
                   deleteItem(item.id, setCardItems);
+                  notify('Item deleted', 'error');
                 }}
               >
                 <Trash
@@ -163,6 +159,10 @@ function Card({
       style={{ backgroundColor: cardOptions.color, height: `${height}px` }}
       onDragOver={(e) => {
         e.preventDefault();
+      }}
+      onDragLeave={(e) => {
+        e.preventDefault();
+        setCardItems(cardItems.filter((item) => item.id !== 0));
       }}
       onDrop={(e) => {
         e.preventDefault();
