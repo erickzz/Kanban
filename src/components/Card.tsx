@@ -205,7 +205,7 @@ function Card({
               setNewCardOption('');
             }}
           >
-            Add new
+            Adicionar
           </button>
         </div>
       </ul>
