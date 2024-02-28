@@ -1,30 +1,21 @@
-# React + TypeScript + Vite
+## Projeto Kanban Simples
+Este é um projeto de Kanban simples desenvolvido em Typescript com o intuito de praticar e por em prática alguns conceitos.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Descrição
+Este projeto é uma aplicação Kanban básica que permite aos usuários organizar suas tarefas em diferentes colunas, como para organização de tarefas.
 
-Currently, two official plugins are available:
+### Funcionalidades
+Adicionar novas tarefas.
+Mover tarefas entre colunas.
+Excluir tarefas.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Instalação
+Clone este repositório: git clone https://github.com/erickzz/Kanban
 
-## Expanding the ESLint configuration
+Navegue até o diretório do projeto: **cd nome-do-repositorio**
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Instale as dependências: **npm install** ou **yarn install**
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Uso
+Inicie o servidor local: **npm run dev** ou **yarn run dev**
+Acesse o aplicativo em seu navegador: http://localhost:5173
