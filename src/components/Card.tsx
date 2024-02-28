@@ -25,7 +25,7 @@ function Card({
     } else {
       setCardItems(JSON.parse(itemsFromStorage));
     }
-  }, []);
+  }, [setCardItems]);
 
   const [newCardOption, setNewCardOption] = useState<string>('');
   const [editItemValue, setEditItemValue] = useState<string>('');
