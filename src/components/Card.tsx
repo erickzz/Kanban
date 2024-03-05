@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Trash, Pencil, ArrowLeftRight } from 'lucide-react';
+import { Trash, Pencil } from 'lucide-react';
 import { CardProperties, CardItems } from '../types';
 import { addNewOption, deleteItem, editItem, moveItem } from '../CardFunctions';
 
@@ -29,11 +29,10 @@ function Card({
 
   const [newCardOption, setNewCardOption] = useState<string>('');
   const [editItemValue, setEditItemValue] = useState<string>('');
-  const cards = JSON.parse(localStorage.getItem('cards') as string);
   const cardId = cardOptions.id;
   const itensNumber = cardItems.filter((item) => item.cardId === cardId).length;
   const height = 180 + 70 * itensNumber;
-  const [showMoveItem, setShowMoveItem] = useState<number[]>([]);
+  const [showMoveItem] = useState<number[]>([]);
 
   useEffect(() => {
     if (showMoveItem.length > 0) {
@@ -63,7 +62,7 @@ function Card({
             <input
               id={item.id.toString()}
               defaultValue={item.value}
-              className="bg-slate-200 w-2/4 cursor-default p-2 focus:outline-double rounded"
+              className="bg-slate-200 w-2/4 cursor-default p-2 focus:outline-double rounded h-auto flex-wrap"
               onBlur={() => {
                 if (editItemValue === '') {
                   console.log(cardItems);
@@ -83,44 +82,7 @@ function Card({
               }}
             />
             <div className="w-1/6 flex justify-end">
-              <button className="p-2 h-auto w-auto">
-                {showMoveItem.includes(item.id) ? (
-                  <select
-                    className="bg-slate-200 w-auto focus:outline-none rounded px-2 transition-colors hover:bg-white hover:text-black"
-                    id={item.id.toString()}
-                    value={cardOptions.id}
-                    onChange={(e) => {
-                      moveItem(
-                        +e.target.value,
-                        item.id,
-                        cardItems,
-                        setCardItems
-                      );
-                    }}
-                    onBlur={() => {
-                      setShowMoveItem((prev) =>
-                        prev.filter((i) => i !== item.id)
-                      );
-                    }}
-                  >
-                    {cards.map((card: CardProperties) => {
-                      return (
-                        <option key={card.id} value={card.id}>
-                          {card.title}
-                        </option>
-                      );
-                    })}
-                  </select>
-                ) : (
-                  <ArrowLeftRight
-                    size={20}
-                    className="text-zinc-500 hover:text-zinc-800 transition-colors"
-                    onClick={() => {
-                      setShowMoveItem((prev) => [...prev, item.id]);
-                    }}
-                  />
-                )}
-              </button>
+              <button className="p-2 h-auto w-auto"></button>
               <button
                 className="p-2 h-auto w-auto"
                 onClick={() => {
