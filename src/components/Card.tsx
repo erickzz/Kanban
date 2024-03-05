@@ -52,7 +52,8 @@ function Card({
       return (
         <li
           key={index}
-          className="p-2 bg-slate-200 rounded mt-4"
+          className="p-2 bg-slate-200 mt-4"
+          style={{ backgroundColor: cardOptions.color }}
           draggable="true"
           onDragStart={(e) => {
             e.dataTransfer.setData('text/plain', item.id.toString());
@@ -62,7 +63,7 @@ function Card({
             <input
               id={item.id.toString()}
               defaultValue={item.value}
-              className="bg-slate-200 w-2/4 cursor-default p-2 focus:outline-double rounded h-auto flex-wrap"
+              className="bg-slate-200 w-3/4 cursor-default p-2 focus:outline-double h-auto flex-wrap"
               onBlur={() => {
                 if (editItemValue === '') {
                   console.log(cardItems);
@@ -116,8 +117,8 @@ function Card({
 
   return (
     <div
-      className={`border-slate-300 border-2 p-4 rounded-lg m-4 w-1/5`}
-      style={{ backgroundColor: cardOptions.color, height: `${height}px` }}
+      className={`p-4  m-4 w-1/5`}
+      style={{ height: `${height}px` }}
       onDragOver={(e) => {
         e.preventDefault();
       }}
@@ -131,8 +132,11 @@ function Card({
         moveItem(cardOptions.id, +id, cardItems, setCardItems);
       }}
     >
-      <div className="flex justify-between">
-        <h3 className="text-xl font-semibold ">{cardOptions.title}</h3>
+      <div
+        className="flex justify-between w-full flex-wrap p-4"
+        style={{ backgroundColor: cardOptions.color }}
+      >
+        <h3 className="text-xl font-semibold">{cardOptions.title}</h3>
         <div className="flex gap-4">
           <Pencil
             className="text-zinc-800 cursor-pointer hover:text-slate-200 transition-colors"
@@ -147,27 +151,28 @@ function Card({
             }}
           />
         </div>
+        <p className="">{cardOptions.description}</p>
       </div>
-      <p className="">{cardOptions.description}</p>
-      <ul>
-        {ItemsRender}
-        <div className="flex h-auto w-auto  ">
-          <input
-            className=" bg-slate-200 rounded mt-4 mr-4 h-10 p-2 w-4/6 focus:outline-none"
-            onChange={(e) => setNewCardOption(e.target.value)}
-            value={newCardOption}
-          />
-          <button
-            className="bg-none border-2 border-white rounded px-4 h-10 text-sm text-white self-end w-1/2 hover:bg-white hover:text-black transition-colors"
-            onClick={() => {
-              addNewOption(newCardOption, cardOptions.id, setCardItems);
-              setNewCardOption('');
-            }}
-          >
-            Adicionar
-          </button>
-        </div>
-      </ul>
+      <ul>{ItemsRender}</ul>
+      <div
+        className="flex items-center justify-center h-auto w-auto p-4 mt-4"
+        style={{ backgroundColor: cardOptions.color }}
+      >
+        <input
+          className=" bg-slate-200 rounded mt-4 mr-4 h-10 p-2 w-4/6 focus:outline-none"
+          onChange={(e) => setNewCardOption(e.target.value)}
+          value={newCardOption}
+        />
+        <button
+          className="bg-none border-2 border-white rounded px-4 h-10 text-sm text-white self-end w-1/2 hover:bg-white hover:text-black transition-colors"
+          onClick={() => {
+            addNewOption(newCardOption, cardOptions.id, setCardItems);
+            setNewCardOption('');
+          }}
+        >
+          Adicionar
+        </button>
+      </div>
     </div>
   );
 }
