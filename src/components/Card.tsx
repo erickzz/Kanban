@@ -61,7 +61,7 @@ function Card({
     return (
       <li
         key={item.id}
-        className="w-[90%] p-2 mt-4 border-2 border-white rounded bg-white shadow-lg"
+        className="w-full p-2 mt-4 border-2 border-white rounded bg-white shadow-lg"
         style={{ backgroundColor: cardOptions.color }}
         draggable="true"
         onDragStart={(e) => {
