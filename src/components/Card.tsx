@@ -123,7 +123,7 @@ function Card({
 
   return (
     <div
-      className={`p-4  m-4 w-1/5`}
+      className={`p-4  mx-4 mb-14 w-1/5`}
       style={{ height: `${height}px` }}
       onDragOver={(e) => {
         e.preventDefault();

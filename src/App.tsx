@@ -95,7 +95,12 @@ function App() {
   const modal = (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-      onClick={() => setShowModal(false)}
+      id="modal-container"
+      onMouseDown={(e) => {
+        if (e.target === document.getElementById('modal-container')) {
+          setShowModal(false);
+        }
+      }}
     >
       <div
         className="bg-white p-4 rounded-lg w-1/4 text-black"
