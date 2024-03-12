@@ -75,3 +75,18 @@ export function moveItem(
   setRefresh(prev => !prev)
 }
 
+export function moveItemToTop(
+  idCard: number,
+  itemId: number,
+  setCardItems: React.Dispatch<React.SetStateAction<CardItems[]>>
+) {
+
+console.log(itemId, idCard)
+
+  const itemsFromStorage = JSON.parse(localStorage.getItem(`cardItems_${idCard}`) || '[]');
+  const itemToMove = itemsFromStorage.findIndex((i: CardItems) => i.id === itemId);
+  itemsFromStorage[itemToMove].index = Math.min(...itemsFromStorage.map((i: CardItems) => i.index), 0) - 1;
+  localStorage.setItem(`cardItems_${idCard}`, JSON.stringify(itemsFromStorage));
+  setCardItems(itemsFromStorage);
+}
+

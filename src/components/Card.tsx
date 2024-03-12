@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Trash, Pencil } from 'lucide-react';
+import { Trash, Pencil, ArrowUp } from 'lucide-react';
 import { CardProperties, CardItems } from '../types';
-import { addNewOption, deleteItem, editItem, moveItem } from '../CardFunctions';
+import {
+  addNewOption,
+  deleteItem,
+  editItem,
+  moveItem,
+  moveItemToTop,
+} from '../CardFunctions';
 
 function Card({
   cardOptions,
@@ -92,6 +98,16 @@ function Card({
           />
           <div className="w-1/6 flex justify-end">
             <button
+              onClick={() => {
+                moveItemToTop(cardId, item.id, setCardItems);
+              }}
+            >
+              <ArrowUp
+                size={20}
+                className="text-zinc-800 cursor-pointer hover:text-slate-200 transition-colors"
+              />
+            </button>
+            <button
               className="p-2 h-auto w-auto"
               onClick={() => {
                 const input = document.getElementById(item.id.toString());
@@ -123,7 +139,7 @@ function Card({
 
   return (
     <div
-      className={`p-4  mx-4 mb-14 w-1/6 bg-zinc-700 rounded shadow-lg border-2 border-zinc-600`}
+      className={`p-4  mx-4 mb-14 w-1/5 bg-zinc-700 rounded shadow-lg border-2 border-zinc-600`}
       style={{ height: `${height}px` }}
       onDragOver={(e) => {
         e.preventDefault();
