@@ -1,7 +1,7 @@
 import { Info, PlusCircle, XCircle } from 'lucide-react';
 import { useState, useEffect, useMemo, FormEvent, SetStateAction } from 'react';
 import { Bounce, toast } from 'react-toastify';
-import { CardItems, CardProperties } from './types';
+import { CardProperties } from './types';
 import defaultCards from './defaultCards';
 import Card from './components/Card';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,8 +24,6 @@ function App() {
 
   const [cardsState, setCardsState] = useState<CardProperties[]>(cards);
 
-  const [cardItems, setCardItems] = useState<CardItems[]>([]);
-
   const [showMessage, setShowMessage] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
@@ -38,6 +36,8 @@ function App() {
   }>();
 
   const [color, setColor] = useState({ hex: '#FFFFFF' });
+
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   const editMode = (id: number) => {
     showModal ? setShowModal(false) : setShowModal(true);
@@ -219,10 +219,10 @@ function App() {
             key={index}
             cardOptions={card}
             editCard={editMode}
-            cardItems={cardItems}
-            setCardItems={setCardItems}
             notify={notify}
             removeCard={removeCard}
+            refresh={refresh}
+            setRefresh={setRefresh}
           />
         ))}
         <div
