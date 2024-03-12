@@ -33,7 +33,7 @@ function Card({
   const [editItemValue, setEditItemValue] = useState<string>('');
   const cardId = cardOptions.id;
   const itensNumber = cardItems.length;
-  const height = 180 + 70 * itensNumber;
+  const height = 280 + 70 * itensNumber;
   const [showMoveItem] = useState<number[]>([]);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ function Card({
     return (
       <li
         key={item.id}
-        className="p-2 bg-slate-200 mt-4"
+        className="w-[90%] p-2 mt-4 border-2 border-white rounded bg-white shadow-lg"
         style={{ backgroundColor: cardOptions.color }}
         draggable="true"
         onDragStart={(e) => {
@@ -72,7 +72,7 @@ function Card({
           <input
             id={item.id.toString()}
             defaultValue={item.value}
-            className="bg-slate-200 w-3/4 cursor-default p-2 focus:outline-double h-auto flex-wrap"
+            className="bg-transparent w-3/4 cursor-default p-2 focus:outline-double h-auto flex-wrap"
             onBlur={() => {
               if (editItemValue === '') {
                 (document.getElementById(
@@ -100,7 +100,7 @@ function Card({
             >
               <Pencil
                 size={20}
-                className="text-zinc-500 hover:text-zinc-800 transition-colors "
+                className="text-zinc-800 cursor-pointer hover:text-slate-200 transition-colors"
               />
             </button>
             <button
@@ -112,7 +112,7 @@ function Card({
             >
               <Trash
                 size={20}
-                className="text-zinc-500 hover:text-zinc-800 transition-colors "
+                className="text-zinc-800 cursor-pointer hover:text-slate-200 transition-colors"
               />
             </button>
           </div>
@@ -123,7 +123,7 @@ function Card({
 
   return (
     <div
-      className={`p-4  mx-4 mb-14 w-1/5`}
+      className={`p-4  mx-4 mb-14 w-1/6 bg-zinc-700 rounded shadow-lg border-2 border-zinc-600`}
       style={{ height: `${height}px` }}
       onDragOver={(e) => {
         e.preventDefault();
@@ -140,7 +140,7 @@ function Card({
       }}
     >
       <div
-        className="flex justify-between w-full flex-wrap p-4"
+        className="flex justify-between w-full flex-wrap p-4 border-2 border-white rounded bg-white shadow-lg"
         style={{ backgroundColor: cardOptions.color }}
       >
         <h3 className="text-xl font-semibold">{cardOptions.title}</h3>
@@ -160,13 +160,13 @@ function Card({
         </div>
         <p className="">{cardOptions.description}</p>
       </div>
-      <ul>{ItemsRender}</ul>
+      <ul className="w-full flex items-center flex-col">{ItemsRender}</ul>
       <div
-        className="flex items-center justify-center h-auto w-auto p-4 mt-4"
+        className="flex items-center justify-center h-auto w-auto p-4 mt-4 border-2 border-white rounded bg-white shadow-lg"
         style={{ backgroundColor: cardOptions.color }}
       >
         <input
-          className=" bg-slate-200 rounded mt-4 mr-4 h-10 p-2 w-4/6 focus:outline-none"
+          className=" rounded mt-4 mr-4 h-10 p-2 w-4/6 focus:outline-none"
           onChange={(e) => setNewCardOption(e.target.value)}
           value={newCardOption}
         />

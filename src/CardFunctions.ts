@@ -52,23 +52,26 @@ export function moveItem(
   setCardItems: React.Dispatch<React.SetStateAction<CardItems[]>>,
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>
 ) {
+
+  if(idCard === idCardTarget) return;
+
   let cardTarget = JSON.parse(localStorage.getItem(`cardItems_${idCardTarget}`) || '[]');
   const actualCard = JSON.parse(localStorage.getItem(`cardItems_${idCard}`) || '[]');
 
   const itemToMoveIndex = actualCard.findIndex((i: CardItems) => i.id === itemId);
-
-  if (itemToMoveIndex === -1) return; // Item not found
-
+  
+  if (itemToMoveIndex === -1) return;
+  
   const itemToMove = actualCard[itemToMoveIndex];
+  itemToMove.index = Math.max(...cardTarget.map((i: CardItems) => i.index), 0) + 1;
 
-  // Create copies of the arrays to avoid reference issues
   cardTarget = [...cardTarget, itemToMove];
   actualCard.splice(itemToMoveIndex, 1);
 
   localStorage.setItem(`cardItems_${idCardTarget}`, JSON.stringify(cardTarget));
   localStorage.setItem(`cardItems_${idCard}`, JSON.stringify(actualCard));
   console.log(actualCard)
-  setCardItems(actualCard); // Update state with a new array
+  setCardItems(actualCard);
   setRefresh(prev => !prev)
 }
 
