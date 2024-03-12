@@ -90,6 +90,7 @@ function App() {
     const newCards = cardsState.filter((card) => card.id !== id);
     setCardsState(newCards);
     localStorage.setItem('cards', JSON.stringify(newCards));
+    localStorage.removeItem(`cardItems_${id}`);
   };
 
   const modal = (
