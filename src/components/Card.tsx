@@ -95,7 +95,7 @@ function Card({
             defaultValue={item.value}
             className={`${
               isColorDark ? 'text-white' : 'text-zinc'
-            } bg-transparent w-3/4 cursor-default p-2 focus:outline-double h-auto flex-wrap`}
+            } bg-transparent w-3/5 p-2 focus:outline-double h-auto flex-wrap`}
             onBlur={() => {
               if (editItemValue === '') {
                 (document.getElementById(
